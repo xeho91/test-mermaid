@@ -1,0 +1,35 @@
+graph TB
+    subgraph App
+        Metrics
+        Logs
+        Traces
+    end
+    subgraph OpenTelemetry Collector
+        MetricsReceiver[Metrics Receiver]
+        LogsReceiver[Logs Receiver]
+        TracesReceiver[Traces Receiver]
+        Processor1[Processor 1]
+        Processor2[Processor 2]
+        LogsExporter[Logs Exporter]
+        MetricsExporter[Metrics Exporter]
+        TracesExporter[Traces Exporter]
+    end
+    LogsStorage[(Logs Storage)]
+    MetricsStorage[(Metrics Storage)]
+    TracesStorage[(Traces Storage)]
+    Metrics-->MetricsReceiver
+    Logs-->LogsReceiver
+    Traces-->TracesReceiver
+    MetricsReceiver-->Processor1-->MetricsExporter
+    LogsReceiver-->Processor1-->LogsExporter
+    TracesReceiver-->Processor2-->TracesExporter
+    MetricsExporter-->MetricsStorage
+    LogsExporter-->LogsStorage
+    TracesExporter-->TracesStorage
+    
+    classDef application fill:#f9f,stroke:#333,stroke-width:2px
+    classDef storage fill:#bbf,stroke:#333,stroke-width:2px
+    classDef processing fill:#bfb,stroke:#333,stroke-width:2px
+    class LogsStorage,MetricsStorage,TracesStorage storage
+    class Processor1,Processor2 processing
+    class Metrics,Logs,Traces application
